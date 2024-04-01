@@ -59,7 +59,10 @@ class NanoeMode(Enum):
     On = 2
     ModeG = 3
     All = 4
-
+class ecoFunctionData(Enum):
+    Unavailable = 0
+    Off = 1
+    On = 2
 DEFAULT_X_APP_VERSION = "1.15.0"
 
 MAX_VERSION_AGE = 5
