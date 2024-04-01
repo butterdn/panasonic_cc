@@ -367,9 +367,6 @@ class Session(object):
 
                 if key == 'nanoe' and isinstance(value, constants.NanoeMode) and value != constants.NanoeMode.Unavailable:
                     parameters['nanoe'] = value.value
-                    
-                if key == 'ecoFunctionData':
-                    parameters['ecoFunctionData'] = value
 
 
         # routine to set the auto mode of fan (either horizontal, vertical, both or disabled)
@@ -489,8 +486,7 @@ class Session(object):
                 value['airSwingHorizontal'] = constants.AirSwingLR.Auto
             elif parameters['fanAutoMode'] == constants.AirSwingAutoMode.AirSwingUD.value:
                 value['airSwingVertical'] = constants.AirSwingUD.Auto
-        if 'ecoFunctionData' in parameters:
-            value['ecoFunctionData'] = constants.ecoFunctionData(parameters['ecoFunctionData'])
+
         return value
 
     def _read_features(self, data = {}):
