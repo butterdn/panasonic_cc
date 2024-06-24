@@ -8,6 +8,7 @@ import os
 import urllib3
 import hashlib
 import logging
+import datetime
 
 from . import urls
 from . import constants
@@ -113,10 +114,15 @@ class Session(object):
     def _headers(self):
         if self._settings.version_expired:
             self._updateAppVersion()
+        current_time = datetime.datetime.now()
+        formatted_time = current_time.strftime('%Y-%m-%d %H:%M:%S')        
         return {
             "X-APP-TYPE": "1",
             "X-APP-VERSION": self._appVersion,
             "X-User-Authorization": self._vid,
+            "X-APP-NAME": "Comfort Cloud",
+            "X-APP-TIMESTAMP":formatted_time,
+            "X-CFC-API-KEY":"0",
             "User-Agent": "G-RAC",
             "Accept": "application/json; charset=utf-8",
             "Content-Type": "application/json; charset=utf-8"
@@ -143,7 +149,7 @@ class Session(object):
         
         payload = {
             "clientId": self._settings.clientId,
-            "language": "0",
+            "language": 0,
             "loginId": self._username,
             "password": self._password
         }
@@ -209,7 +215,7 @@ class Session(object):
                 else:
                     list = group.get('deviceIdList', [])
 
-                for device in list:
+                for index, device in enumerate(list):
                     if device:
                         id = None
                         if 'deviceHashGuid' in device:
@@ -220,7 +226,7 @@ class Session(object):
                         self._deviceIndexer[id] = device['deviceGuid']
                         self._devices.append({
                             'id': id,
-                            'name': device['deviceName'],
+                            'name': device['deviceName'] if 'deviceName' in device else f"Unnamed Device #{index}",
                             'group': group['groupName'],
                             'model': device['deviceModuleNumber'] if 'deviceModuleNumber' in device else ''
                         })
